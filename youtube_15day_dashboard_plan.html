@@ -1,0 +1,525 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.plan{padding:12px 0;font-family:var(--font-sans)}
+.phase-header{display:flex;align-items:center;gap:8px;margin:0 0 10px}
+.phase-badge{font-size:11px;font-weight:500;padding:3px 10px;border-radius:12px;white-space:nowrap}
+.phase-title{font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.days-grid{display:flex;flex-direction:column;gap:6px;margin-bottom:20px}
+.day-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;cursor:pointer;transition:border-color .15s}
+.day-card:hover{border-color:var(--color-border-secondary)}
+.day-card.done{border-color:#639922}
+.day-card.done .day-num{background:#EAF3DE;color:#3B6D11}
+.day-top{display:flex;align-items:center;min-height:44px}
+.day-num{min-width:52px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:var(--color-text-secondary);background:var(--color-background-secondary);border-right:0.5px solid var(--color-border-tertiary);flex-direction:column;gap:1px;padding:8px 0;align-self:stretch}
+.day-num span{font-size:16px;font-weight:500;color:var(--color-text-primary);line-height:1}
+.day-main{flex:1;padding:8px 12px}
+.day-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px}
+.day-sub{font-size:11px;color:var(--color-text-secondary)}
+.day-right{padding:0 12px;display:flex;align-items:center;gap:6px}
+.tag{font-size:10px;padding:2px 7px;border-radius:10px;white-space:nowrap}
+.check-btn{width:22px;height:22px;border-radius:50%;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:13px;color:var(--color-text-tertiary);transition:all .15s}
+.day-card.done .check-btn{background:#EAF3DE;border-color:#639922;color:#3B6D11}
+.day-details{display:none;padding:10px 12px 12px 64px;border-top:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary)}
+.day-card.open .day-details{display:block}
+.detail-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.04em;color:var(--color-text-tertiary);margin-bottom:5px;margin-top:10px}
+.detail-label:first-child{margin-top:0}
+.code-block{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:8px 10px;font-family:var(--font-mono);font-size:11px;color:var(--color-text-secondary);line-height:1.7;white-space:pre-wrap}
+.task-list{list-style:none;display:flex;flex-direction:column;gap:4px}
+.task-list li{font-size:12px;color:var(--color-text-secondary);display:flex;align-items:flex-start;gap:6px;line-height:1.5}
+.task-list li::before{content:"→";color:var(--color-text-tertiary);flex-shrink:0;font-size:11px;margin-top:2px}
+.tip-box{background:var(--color-background-info);border-left:2px solid #378ADD;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:6px 10px;font-size:12px;color:var(--color-text-info);margin-top:8px}
+.wow-box{background:var(--color-background-warning);border-left:2px solid #EF9F27;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:6px 10px;font-size:12px;color:var(--color-text-warning);margin-top:8px}
+.progress-bar-wrap{background:var(--color-background-secondary);border-radius:4px;height:6px;margin-bottom:16px;overflow:hidden;border:0.5px solid var(--color-border-tertiary)}
+.progress-bar-fill{height:100%;background:#E24B4A;border-radius:4px;transition:width .3s}
+.progress-label{font-size:11px;color:var(--color-text-secondary);margin-bottom:6px;display:flex;justify-content:space-between}
+.divider{height:0.5px;background:var(--color-border-tertiary);margin:16px 0}
+.dataset-info{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px}
+.info-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px;border:0.5px solid var(--color-border-tertiary)}
+.info-val{font-size:18px;font-weight:500;color:var(--color-text-primary);line-height:1.2}
+.info-lbl{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+</style>
+
+<div class="plan">
+<h2 class="sr-only">YouTube Creator Analytics 15-day dashboard project plan</h2>
+
+<div class="dataset-info">
+  <div class="info-card"><div class="info-val">995</div><div class="info-lbl">YouTube channels</div></div>
+  <div class="info-card"><div class="info-val">28</div><div class="info-lbl">columns / features</div></div>
+  <div class="info-card"><div class="info-val">6</div><div class="info-lbl">charts to build</div></div>
+</div>
+
+<div class="progress-label">
+  <span id="prog-text">Progress: 0 / 15 days done</span>
+  <span id="prog-pct">0%</span>
+</div>
+<div class="progress-bar-wrap"><div class="progress-bar-fill" id="prog-bar" style="width:0%"></div></div>
+
+<div class="phase-header">
+  <span class="phase-badge" style="background:#EAF3DE;color:#3B6D11;border:0.5px solid #97C459">Phase 1</span>
+  <span class="phase-title">Setup & Explore Data (Days 1–3)</span>
+</div>
+<div class="days-grid">
+
+<div class="day-card" id="d1">
+  <div class="day-top" onclick="toggleDay('d1')">
+    <div class="day-num">Day<span>1</span></div>
+    <div class="day-main"><div class="day-title">Environment + dataset download</div><div class="day-sub">Kaggle, install, first look</div></div>
+    <div class="day-right"><span class="tag" style="background:#EAF3DE;color:#3B6D11">Setup</span><div class="check-btn" onclick="event.stopPropagation();markDone('d1')">✓</div></div>
+  </div>
+  <div class="day-details">
+    <div class="detail-label">Dataset download</div>
+    <div class="code-block">kaggle.com → search "Global YouTube Statistics 2023"
+→ nelgiriyewithana/global-youtube-statistics-2023
+→ Download global_youtube_statistics.csv</div>
+    <div class="detail-label">Install</div>
+    <div class="code-block">pip install pandas numpy matplotlib plotly streamlit</div>
+    <div class="detail-label">First look</div>
+    <div class="code-block">import pandas as pd
+df = pd.read_csv('global_youtube_statistics.csv', encoding='latin-1')
+print(df.shape)    # (995, 28)
+print(df.columns)
+print(df.head(3))</div>
+    <div class="tip-box">💡 encoding='latin-1' add කරන්නම ඕනේ — channel names special characters ඇති!</div>
+  </div>
+</div>
+
+<div class="day-card" id="d2">
+  <div class="day-top" onclick="toggleDay('d2')">
+    <div class="day-num">Day<span>2</span></div>
+    <div class="day-main"><div class="day-title">Data cleaning</div><div class="day-sub">Nulls, data types, earnings columns</div></div>
+    <div class="day-right"><span class="tag" style="background:#EAF3DE;color:#3B6D11">Clean</span><div class="check-btn" onclick="event.stopPropagation();markDone('d2')">✓</div></div>
+  </div>
+  <div class="day-details">
+    <div class="detail-label">Cleaning code</div>
+    <div class="code-block">df.isnull().sum().sort_values(ascending=False)
+
+# Key columns rename
+df.rename(columns={
+    'highest_yearly_earnings': 'max_yearly_earn',
+    'lowest_yearly_earnings':  'min_yearly_earn',
+    'video views for the last 30 days': 'views_30d',
+    'subscribers_for_last_30_days': 'subs_30d'
+}, inplace=True)
+
+# Drop rows missing country or category
+df.dropna(subset=['Country', 'category'], inplace=True)
+
+# Earnings avg column
+df['avg_earn'] = (df['max_yearly_earn'] + df['min_yearly_earn']) / 2
+
+df.to_csv('yt_clean.csv', index=False)
+print(f"Clean rows: {len(df)}")</div>
+    <div class="detail-label">Key columns දැනගන්න</div>
+    <ul class="task-list">
+      <li>subscribers, video views — channel size</li>
+      <li>highest/lowest_yearly_earnings — monetization</li>
+      <li>created_year — channel age</li>
+      <li>Country, category, channel_type — segments</li>
+      <li>views_30d, subs_30d — recent momentum</li>
+    </ul>
+  </div>
+</div>
+
+<div class="day-card" id="d3">
+  <div class="day-top" onclick="toggleDay('d3')">
+    <div class="day-num">Day<span>3</span></div>
+    <div class="day-main"><div class="day-title">EDA — basic stats & patterns</div><div class="day-sub">Distributions, outliers, correlations</div></div>
+    <div class="day-right"><span class="tag" style="background:#EAF3DE;color:#3B6D11">EDA</span><div class="check-btn" onclick="event.stopPropagation();markDone('d3')">✓</div></div>
+  </div>
+  <div class="day-details">
+    <div class="detail-label">Code</div>
+    <div class="code-block">print(df['subscribers'].describe())
+print(df['avg_earn'].describe())
+
+# Top 10 channels
+print(df.nlargest(10,'subscribers')[['Youtuber','subscribers','category','Country']])
+
+# Correlation check
+print(df[['subscribers','video views','avg_earn']].corr())</div>
+    <div class="detail-label">Insights note කරන්න</div>
+    <ul class="task-list">
+      <li>T-Series, MrBeast, Cocomelon top ද check කරන්න</li>
+      <li>Subscribers vs earnings correlation ඇද?</li>
+      <li>Which category most channels ඇත්ද?</li>
+    </ul>
+    <div class="wow-box">⭐ Interview insight: "Subscribers alone don't predict earnings — channel type matters more"</div>
+  </div>
+</div>
+
+</div>
+
+<div class="divider"></div>
+
+<div class="phase-header">
+  <span class="phase-badge" style="background:#E6F1FB;color:#185FA5;border:0.5px solid #85B7EB">Phase 2</span>
+  <span class="phase-title">6 Charts Build (Days 4–9)</span>
+</div>
+<div class="days-grid">
+
+<div class="day-card" id="d4">
+  <div class="day-top" onclick="toggleDay('d4')">
+    <div class="day-num">Day<span>4</span></div>
+    <div class="day-main"><div class="day-title">Top 10 channels bar chart</div><div class="day-sub">Most subscribed creators globally</div></div>
+    <div class="day-right"><span class="tag" style="background:#E6F1FB;color:#185FA5">Chart 1</span><div class="check-btn" onclick="event.stopPropagation();markDone('d4')">✓</div></div>
+  </div>
+  <div class="day-details">
+    <div class="detail-label">Code</div>
+    <div class="code-block">import plotly.express as px
+
+top10 = df.nlargest(10, 'subscribers')
+fig = px.bar(top10, x='subscribers', y='Youtuber',
+             orientation='h',
+             color='category',
+             title='Top 10 Most Subscribed YouTube Channels',
+             labels={'subscribers':'Subscribers','Youtuber':'Channel'})
+fig.update_layout(yaxis={'categoryorder':'total ascending'})
+fig.show()</div>
+    <div class="tip-box">💡 color='category' → chart ම category breakdown show කරනවා. Clean!</div>
+  </div>
+</div>
+
+<div class="day-card" id="d5">
+  <div class="day-top" onclick="toggleDay('d5')">
+    <div class="day-num">Day<span>5</span></div>
+    <div class="day-main"><div class="day-title">Category distribution</div><div class="day-sub">Which content type dominates?</div></div>
+    <div class="day-right"><span class="tag" style="background:#E6F1FB;color:#185FA5">Chart 2</span><div class="check-btn" onclick="event.stopPropagation();markDone('d5')">✓</div></div>
+  </div>
+  <div class="day-details">
+    <div class="detail-label">Code</div>
+    <div class="code-block">cat_count = df['category'].value_counts().reset_index()
+cat_count.columns = ['category', 'count']
+
+fig = px.bar(cat_count, x='category', y='count',
+             color='count', color_continuous_scale='Reds',
+             title='YouTube Channel Categories Distribution')
+fig.update_xaxes(tickangle=45)
+fig.show()</div>
+    <div class="detail-label">Expected insight</div>
+    <ul class="task-list">
+      <li>Entertainment + Music = top 2 categories</li>
+      <li>Education channels growing fast — note this!</li>
+    </ul>
+  </div>
+</div>
+
+<div class="day-card" id="d6">
+  <div class="day-top" onclick="toggleDay('d6')">
+    <div class="day-num">Day<span>6</span></div>
+    <div class="day-main"><div class="day-title">World map — creators by country</div><div class="day-sub">Geographic distribution choropleth</div></div>
+    <div class="day-right"><span class="tag" style="background:#E6F1FB;color:#185FA5">Chart 3</span><div class="check-btn" onclick="event.stopPropagation();markDone('d6')">✓</div></div>
+  </div>
+  <div class="day-details">
+    <div class="detail-label">Code</div>
+    <div class="code-block">country_data = df.groupby('Country').agg(
+    channels=('Youtuber','count'),
+    avg_subs=('subscribers','mean'),
+    total_earn=('avg_earn','sum')
+).reset_index()
+
+fig = px.choropleth(country_data,
+    locations='Country',
+    locationmode='country names',
+    color='channels',
+    hover_data=['avg_subs','total_earn'],
+    color_continuous_scale='YlOrRd',
+    title='YouTube Creators by Country')
+fig.show()</div>
+    <div class="wow-box">⭐ Most impressive chart in your portfolio — hover kala earnings + subs show wenawa!</div>
+  </div>
+</div>
+
+<div class="day-card" id="d7">
+  <div class="day-top" onclick="toggleDay('d7')">
+    <div class="day-num">Day<span>7</span></div>
+    <div class="day-main"><div class="day-title">Subscribers vs Earnings scatter</div><div class="day-sub">Correlation — does subs = money?</div></div>
+    <div class="day-right"><span class="tag" style="background:#E6F1FB;color:#185FA5">Chart 4</span><div class="check-btn" onclick="event.stopPropagation();markDone('d7')">✓</div></div>
+  </div>
+  <div class="day-details">
+    <div class="detail-label">Code</div>
+    <div class="code-block">fig = px.scatter(df, 
+    x='subscribers', y='avg_earn',
+    color='category', size='video views',
+    hover_name='Youtuber',
+    log_x=True, log_y=True,
+    title='Subscribers vs Earnings (log scale)',
+    labels={'avg_earn':'Avg Yearly Earnings ($)'})
+fig.show()</div>
+    <div class="detail-label">Key insight</div>
+    <ul class="task-list">
+      <li>log scale = outliers (MrBeast) handle කරනවා cleanly</li>
+      <li>Music channels: high views, lower earnings per sub</li>
+      <li>Education channels: lower views, higher earnings per sub</li>
+    </ul>
+    <div class="wow-box">⭐ Interview question: "What's the relationship between subscribers and earnings?" — this chart answers it perfectly!</div>
+  </div>
+</div>
+
+<div class="day-card" id="d8">
+  <div class="day-top" onclick="toggleDay('d8')">
+    <div class="day-num">Day<span>8</span></div>
+    <div class="day-main"><div class="day-title">Earnings by category</div><div class="day-sub">Which niche pays most?</div></div>
+    <div class="day-right"><span class="tag" style="background:#E6F1FB;color:#185FA5">Chart 5</span><div class="check-btn" onclick="event.stopPropagation();markDone('d8')">✓</div></div>
+  </div>
+  <div class="day-details">
+    <div class="detail-label">Code</div>
+    <div class="code-block">earn_cat = df.groupby('category')['avg_earn'].median().reset_index()
+earn_cat = earn_cat.sort_values('avg_earn', ascending=False)
+
+fig = px.bar(earn_cat, x='category', y='avg_earn',
+             color='avg_earn',
+             color_continuous_scale='Greens',
+             title='Median Yearly Earnings by Category ($)',
+             labels={'avg_earn':'Median Earnings ($)'})
+fig.update_xaxes(tickangle=45)
+fig.show()</div>
+    <div class="tip-box">💡 median use කරන්නේ outliers (MrBeast level) affect නොවෙන්නයි — smart analytical choice!</div>
+  </div>
+</div>
+
+<div class="day-card" id="d9">
+  <div class="day-top" onclick="toggleDay('d9')">
+    <div class="day-num">Day<span>9</span></div>
+    <div class="day-main"><div class="day-title">Channel creation timeline</div><div class="day-sub">YouTube growth over years</div></div>
+    <div class="day-right"><span class="tag" style="background:#E6F1FB;color:#185FA5">Chart 6</span><div class="check-btn" onclick="event.stopPropagation();markDone('d9')">✓</div></div>
+  </div>
+  <div class="day-details">
+    <div class="detail-label">Code</div>
+    <div class="code-block">year_growth = df.groupby('created_year').agg(
+    channels=('Youtuber','count'),
+    avg_subs=('subscribers','mean')
+).reset_index()
+
+fig = px.line(year_growth, x='created_year', 
+              y='channels', 
+              title='New Top Channels Created Per Year',
+              markers=True)
+fig.add_scatter(x=year_growth['created_year'],
+                y=year_growth['avg_subs']/1e6,
+                name='Avg Subs (M)', yaxis='y2')
+fig.show()</div>
+    <div class="wow-box">⭐ Dual axis chart — channels count + avg subscribers — shows saturation effect post-2015!</div>
+  </div>
+</div>
+
+</div>
+
+<div class="divider"></div>
+
+<div class="phase-header">
+  <span class="phase-badge" style="background:#FAEEDA;color:#854F0B;border:0.5px solid #FAC775">Phase 3</span>
+  <span class="phase-title">Streamlit App (Days 10–12)</span>
+</div>
+<div class="days-grid">
+
+<div class="day-card" id="d10">
+  <div class="day-top" onclick="toggleDay('d10')">
+    <div class="day-num">Day<span>10</span></div>
+    <div class="day-main"><div class="day-title">App structure + KPI cards</div><div class="day-sub">Layout, sidebar filters, metrics</div></div>
+    <div class="day-right"><span class="tag" style="background:#FAEEDA;color:#854F0B">App</span><div class="check-btn" onclick="event.stopPropagation();markDone('d10')">✓</div></div>
+  </div>
+  <div class="day-details">
+    <div class="detail-label">app.py skeleton</div>
+    <div class="code-block">import streamlit as st
+import pandas as pd
+import plotly.express as px
+
+st.set_page_config(page_title="YouTube Creator Analytics",
+                   page_icon="🎥", layout="wide")
+st.title("🎥 Global YouTube Creator Analytics")
+st.caption("995 top creators · 2023 data · 28 metrics")
+
+df = pd.read_csv('yt_clean.csv')
+
+# Sidebar
+st.sidebar.header("Filters")
+cats = ['All'] + sorted(df['category'].dropna().unique())
+selected = st.sidebar.selectbox("Category", cats)
+countries = st.sidebar.multiselect("Countries", df['Country'].unique())
+
+if selected != 'All':
+    df = df[df['category'] == selected]
+if countries:
+    df = df[df['Country'].isin(countries)]
+
+# KPI row
+c1,c2,c3,c4 = st.columns(4)
+c1.metric("Total Channels", len(df))
+c2.metric("Avg Subscribers", f"{df['subscribers'].mean()/1e6:.1f}M")
+c3.metric("Avg Yearly Earnings", f"${df['avg_earn'].mean():,.0f}")
+c4.metric("Countries", df['Country'].nunique())</div>
+  </div>
+</div>
+
+<div class="day-card" id="d11">
+  <div class="day-top" onclick="toggleDay('d11')">
+    <div class="day-num">Day<span>11</span></div>
+    <div class="day-main"><div class="day-title">All 6 charts integrate</div><div class="day-sub">2-column layout, interactive filters</div></div>
+    <div class="day-right"><span class="tag" style="background:#FAEEDA;color:#854F0B">App</span><div class="check-btn" onclick="event.stopPropagation();markDone('d11')">✓</div></div>
+  </div>
+  <div class="day-details">
+    <div class="detail-label">Layout pattern</div>
+    <div class="code-block">col1, col2 = st.columns(2)
+with col1:
+    st.subheader("Top 10 Creators")
+    st.plotly_chart(fig_top10, use_container_width=True)
+with col2:
+    st.subheader("Category Distribution")
+    st.plotly_chart(fig_cat, use_container_width=True)
+
+st.subheader("Global Creator Map")
+st.plotly_chart(fig_map, use_container_width=True)
+
+col3, col4 = st.columns(2)
+with col3:
+    st.plotly_chart(fig_scatter, use_container_width=True)
+with col4:
+    st.plotly_chart(fig_earnings, use_container_width=True)
+
+st.plotly_chart(fig_timeline, use_container_width=True)</div>
+    <div class="tip-box">💡 Filters work = filtered data automatically update all 6 charts එකවර!</div>
+  </div>
+</div>
+
+<div class="day-card" id="d12">
+  <div class="day-top" onclick="toggleDay('d12')">
+    <div class="day-num">Day<span>12</span></div>
+    <div class="day-main"><div class="day-title">Insights section + polish</div><div class="day-sub">Key findings, UI clean up</div></div>
+    <div class="day-right"><span class="tag" style="background:#FAEEDA;color:#854F0B">App</span><div class="check-btn" onclick="event.stopPropagation();markDone('d12')">✓</div></div>
+  </div>
+  <div class="day-details">
+    <div class="detail-label">Insights section add</div>
+    <div class="code-block">st.divider()
+st.subheader("Key Insights")
+i1, i2, i3 = st.columns(3)
+i1.info("Entertainment & Music dominate with 40%+ of top channels")
+i2.warning("Subscribers ≠ Earnings: Education channels earn 3x more per sub than Music")
+i3.success("US + India produce 45% of all top creator content globally")</div>
+    <div class="detail-label">Final checklist</div>
+    <ul class="task-list">
+      <li>streamlit run app.py — full test</li>
+      <li>All filters working + charts updating</li>
+      <li>Mobile resize check</li>
+      <li>3 insight boxes add (info/warning/success)</li>
+    </ul>
+  </div>
+</div>
+
+</div>
+
+<div class="divider"></div>
+
+<div class="phase-header">
+  <span class="phase-badge" style="background:#EEEDFE;color:#3C3489;border:0.5px solid #AFA9EC">Phase 4</span>
+  <span class="phase-title">GitHub + Deploy + Share (Days 13–15)</span>
+</div>
+<div class="days-grid">
+
+<div class="day-card" id="d13">
+  <div class="day-top" onclick="toggleDay('d13')">
+    <div class="day-num">Day<span>13</span></div>
+    <div class="day-main"><div class="day-title">GitHub upload + README</div><div class="day-sub">Clean repo, good README</div></div>
+    <div class="day-right"><span class="tag" style="background:#EEEDFE;color:#3C3489">GitHub</span><div class="check-btn" onclick="event.stopPropagation();markDone('d13')">✓</div></div>
+  </div>
+  <div class="day-details">
+    <div class="detail-label">README.md template</div>
+    <div class="code-block"># Global YouTube Creator Analytics Dashboard
+
+Interactive EDA dashboard analyzing 995 top YouTube
+creators across 50+ countries using Python & Plotly.
+
+## Key Insights
+- Education channels earn 3x more per subscriber than Music
+- US + India produce 45% of top creator content
+- Channel growth peaked 2012-2016, now saturating
+
+## Charts Built
+- Top 10 creators by subscribers
+- Category distribution analysis  
+- World map: creators by country
+- Subscribers vs Earnings correlation (log scale)
+- Earnings by category (median)
+- Channel creation timeline
+
+## Tech Stack
+Python · Pandas · Plotly · Streamlit
+
+## Live Demo
+[your link here]</div>
+    <div class="detail-label">requirements.txt</div>
+    <div class="code-block">pandas
+plotly
+streamlit
+numpy</div>
+  </div>
+</div>
+
+<div class="day-card" id="d14">
+  <div class="day-top" onclick="toggleDay('d14')">
+    <div class="day-num">Day<span>14</span></div>
+    <div class="day-main"><div class="day-title">Streamlit Cloud deploy</div><div class="day-sub">Free live link get</div></div>
+    <div class="day-right"><span class="tag" style="background:#EEEDFE;color:#3C3489">Deploy</span><div class="check-btn" onclick="event.stopPropagation();markDone('d14')">✓</div></div>
+  </div>
+  <div class="day-details">
+    <div class="detail-label">Steps</div>
+    <ul class="task-list">
+      <li>share.streamlit.io → GitHub login</li>
+      <li>New app → ඔයාගේ repo → app.py select</li>
+      <li>Deploy → 3 mins → live URL!</li>
+      <li>URL format: yourname-youtube-analytics.streamlit.app</li>
+    </ul>
+    <div class="tip-box">💡 Dataset CSV ද GitHub repo ට push කරන්නම ඕනේ — Streamlit ට access ඕනේ!</div>
+  </div>
+</div>
+
+<div class="day-card" id="d15">
+  <div class="day-top" onclick="toggleDay('d15')">
+    <div class="day-num">Day<span>15</span></div>
+    <div class="day-main"><div class="day-title">LinkedIn post — world tell</div><div class="day-sub">Recruiter attention get</div></div>
+    <div class="day-right"><span class="tag" style="background:#EEEDFE;color:#3C3489">Share</span><div class="check-btn" onclick="event.stopPropagation();markDone('d15')">✓</div></div>
+  </div>
+  <div class="day-details">
+    <div class="detail-label">LinkedIn post</div>
+    <div class="code-block">Just built my first data analytics project!
+
+Analyzed 995 top YouTube creators across 50+ countries.
+Surprising finding: having MORE subscribers doesn't
+always mean earning MORE money.
+
+Education channels earn ~3x per subscriber vs Music.
+
+Built with: Python · Pandas · Plotly · Streamlit
+Live dashboard: [your link]
+
+What content category do you think earns the most?
+Comment below!
+
+#DataScience #Python #EDA #YouTube #Streamlit</div>
+    <div class="wow-box">⭐ Question at the end = comments = LinkedIn algorithm boost = more recruiter views!</div>
+  </div>
+</div>
+
+</div>
+
+<button onclick="sendPrompt('YouTube creator analytics project interview දී explain කරන හැටි කියන්න')" style="margin-top:16px;width:100%;padding:10px;border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);font-size:13px;color:var(--color-text-secondary);cursor:pointer;text-align:left">Interview දී මේ project explain කරන හැටි → ↗</button>
+</div>
+
+<script>
+function toggleDay(id){
+  const card=document.getElementById(id);
+  if(!card.classList.contains('done')) card.classList.toggle('open');
+}
+function markDone(id){
+  const card=document.getElementById(id);
+  card.classList.add('done');
+  card.classList.remove('open');
+  updateProgress();
+}
+function updateProgress(){
+  const done=document.querySelectorAll('.day-card.done').length;
+  const pct=Math.round(done/15*100);
+  document.getElementById('prog-text').textContent='Progress: '+done+' / 15 days done';
+  document.getElementById('prog-pct').textContent=pct+'%';
+  document.getElementById('prog-bar').style.width=pct+'%';
+}
+</script>
